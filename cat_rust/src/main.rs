@@ -7,6 +7,7 @@ use clap::Parser;
 #[command(version="1.0")]
 #[command(about="concatenate files and print on the standard output",long_about= None)]
 struct Cli{
+    /// This is the name of the file that you want to concatenate on the stdout
     file_name: Option<String>
 }
 
