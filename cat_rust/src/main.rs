@@ -1,5 +1,5 @@
 use std::{fs::File, io::{stdin, stdout, Read, Write}};
-
+use std::path::Path;
 use clap::Parser;
 
 #[derive(Parser)]
@@ -22,6 +22,21 @@ fn main(){
                 let _ = stdout().flush();
                 stdin().read_line(&mut s).expect("enter a correct string");
             }
+        }
+    };
+    let file_path = Path::new(&file);
+    let file_path_extention_result = file_path.extension();
+    let _= match file_path_extention_result{
+        Some(val)=>{
+            if val.to_str().unwrap()=="txt"{
+                val
+            }else{
+                println!("File: {}",file);
+                std::process::exit(-1);
+            }
+        }
+        None=>{
+            std::process::exit(-1);
         }
     };
     let file_result = File::open(file);
