@@ -1,4 +1,4 @@
-use std::{fs::File, io::Read};
+use std::{fs::File, io::{stdin, stdout, Read, Write}};
 
 use clap::Parser;
 
@@ -17,8 +17,11 @@ fn main(){
     let file = match file_name{
         Some(val)=>val,
         None=>{
-            println!("No filename given");
-            std::process::exit(-1);
+            loop{
+                let mut s = String::new();
+                let _ = stdout().flush();
+                stdin().read_line(&mut s).expect("enter a correct string");
+            }
         }
     };
     let file_result = File::open(file);
