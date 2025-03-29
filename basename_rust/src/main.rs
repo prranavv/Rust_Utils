@@ -9,7 +9,11 @@ struct Cli{
     /// support multiple arguments and treat each as a NAME
     #[arg(short='a')]
     #[arg(long="multiple")]
-    multiple_inputs: bool
+    multiple_inputs: bool,
+
+    /// end each output line with NUL, not newline
+    #[arg(short='z',long="zero")]
+    new_line:bool
 }
 
 fn main(){
@@ -21,7 +25,12 @@ fn main(){
             let iter =path.split("/");
             let i =iter.last();
             match i{
-                Some(val)=>println!("{}",val),
+                Some(val)=>{
+                    match cli.new_line{
+                        false=>println!("{}",val),
+                        true=>print!("{}",val)
+                    }
+                },
                 _=>(),
             }
         },
@@ -32,7 +41,12 @@ fn main(){
                 let iter = val.split("/");
                 let x = iter.last();
                 match x{
-                    Some(val)=>println!("{}",val),
+                    Some(val)=>{
+                        match cli.new_line{
+                            false=>println!("{}",val),
+                            true=>print!("{}",val),
+                        }
+                    }
                     _=>(),
                 }
             }
