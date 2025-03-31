@@ -1,14 +1,17 @@
 use clap::Parser;
-use base32::{decode, encode, Alphabet};
+use data_encoding::BASE32;
 use std::path::Path;
 use std::fs;
+
 #[derive(Parser)]
-#[command(name="base32_rust",version="1.0",
+#[command(
+name="base32_rust",
+version="1.0",
 about="encode/decode data and print to standard output With no FILE, or when FILE is -, read standard input.")]
 struct Cli{
     file_path: Option<String>,
 
-    /// decode data
+    /// decode data (hasn't been implementeted yet)
     #[arg(short='d',long="decode")]
     decode: bool
 }
@@ -25,26 +28,19 @@ fn main(){
     };
     let path=Path::new(&file_path);
     let f = fs::read_to_string(path).unwrap();
+    let input: &[u8]=f.as_bytes();
     match cli.decode{
         false=>{
-            let a =Alphabet::Rfc4648 { padding: false };
-            let bytes_file_path = f.as_bytes();
-            let encoded_bytes = encode(a, bytes_file_path);
-            println!("{}",encoded_bytes);
-            
+            let encoded_data=BASE32.encode(input);
+            println!("{}",encoded_data); 
         },
         true=>{
-            let a = Alphabet::Rfc4648 { padding: false };
-            let decoded_bytes_op = decode(a, &file_path);
-            let decoded_bytes=match decoded_bytes_op{
-                Some(val)=>val,
-                None=>{
-                    std::process::exit(-1);
-                }
-            };
-            let result=String::from_utf8(decoded_bytes).unwrap();
-            println!("{}",result);
-        }
+            // let mut output = vec![0; BASE32.decode_len(input.len()).unwrap()];
+            // let len = BASE32.decode_mut(input, &mut output).unwrap();
+            // let r = &output[0..len];
+            // let result=String::from_utf8(r.to_vec()).unwrap();
+            // println!("{}",result);
+        }   
     }
     
 }
