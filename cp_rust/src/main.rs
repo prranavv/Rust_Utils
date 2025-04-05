@@ -1,5 +1,4 @@
-use std::{fs, path::Path};
-
+use fs_extra::{self, copy_items, dir};
 use clap::Parser;
 use anyhow::Result;
 
@@ -27,11 +26,11 @@ fn main()-> Result<()>{
         },
     };
 
-    let source_path = Path::new(&source);
-    let destination_path = Path::new(&destination);
+    let options = dir::CopyOptions::new();
 
-    fs::rename(source_path, destination_path)?;
-
+    let mut from_path = Vec::new();
+    from_path.push(source);
+    copy_items(&from_path, destination, &options)?;
     Ok(())
 }
 
